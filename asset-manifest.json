@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/democracy-risk-index/static/css/main.57a93f48.css",
+    "main.js": "/democracy-risk-index/static/js/main.796b5ff5.js",
+    "index.html": "/democracy-risk-index/index.html",
+    "main.57a93f48.css.map": "/democracy-risk-index/static/css/main.57a93f48.css.map",
+    "main.796b5ff5.js.map": "/democracy-risk-index/static/js/main.796b5ff5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.57a93f48.css",
+    "static/js/main.796b5ff5.js"
+  ]
+}
