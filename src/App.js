@@ -8,44 +8,110 @@ import html2canvas from "html2canvas";
 
 const checklist = [
   {
+    id: 0,
     category: "Restructuring Government & Civil Service",
     items: [
-      { text: "Dismantling of federal agencies (e.g., Dept of Education)", score: 9 },
-      { text: "Replacement of civil servants with loyalists", score: 10 },
-      { text: "Weakening checks on executive power", score: 9 },
-      { text: "Imposing ideological loyalty tests on federal employees", score: 8 },
+      {
+        id: 0,
+        text: "Dismantling of federal agencies (e.g., Dept of Education)",
+        score: 9
+      },
+      {
+        id: 1,
+        text: "Replacement of civil servants with loyalists",
+        score: 10
+      },
+      {
+        id: 2,
+        text: "Weakening checks on executive power",
+        score: 9
+      },
+      {
+        id: 3,
+        text: "Imposing ideological loyalty tests on federal employees",
+        score: 8 },
     ],
   },
   {
+    id: 1,
     category: "Legal & Judicial Overhaul",
     items: [
-      { text: "Presidential control over DOJ/FBI", score: 10 },
-      { text: "Stacking courts with loyalists", score: 8 },
-      { text: "Limiting judicial independence", score: 7 },
+      {
+        id: 1,
+        text: "Presidential control over DOJ/FBI",
+        score: 10
+      },
+      {
+        id: 2,
+        text: "Stacking courts with loyalists",
+        score: 8 },
+      {
+        id: 3,
+        text: "Limiting judicial independence",
+        score: 7
+      },
     ],
   },
   {
+    id: 2,
     category: "Social Policy Shifts",
     items: [
-      { text: "Legal restrictions on abortion", score: 9 },
-      { text: "Removal of LGBTQ+ protections", score: 8 },
-      { text: "Imposing religious doctrine into public education", score: 7 },
+      {
+        id: 0,
+        text: "Legal restrictions on abortion",
+        score: 9
+      },
+      {
+        id: 2,
+        text: "Removal of LGBTQ+ protections",
+        score: 8 },
+      {
+        id: 3,
+        text: "Imposing religious doctrine into public education",
+        score: 7
+      },
     ],
   },
   {
+    id: 3,
     category: "Civil Liberties and Free Speech",
     items: [
-      { text: "Censorship of dissenting views", score: 9 },
-      { text: "Retaliation against journalists", score: 8 },
-      { text: "Suppression of protest rights", score: 9 },
+      {
+        id: 1,
+        text: "Censorship of dissenting views",
+        score: 9
+      },
+      {
+        id: 2,
+        text: "Retaliation against journalists",
+        score: 8
+      },
+      {
+        id: 3,
+        text: "Suppression of protest rights",
+        score: 9
+      },
     ],
   },
   {
+    id: 4,
     category: "Electoral Integrity",
     items: [
-      { text: "Politicisation of election administration", score: 10 },
-      { text: "Voter suppression laws", score: 9 },
-      { text: "Refusal to accept legitimate election results", score: 10 },
+      {
+        id: 0,
+        text: "Politicisation of election administration",
+        score: 10
+      },
+      {
+        id: 1,
+        text: "Voter suppression laws",
+        score: 9
+      },
+      {
+        id: 2,
+        text: "Refusal to accept legitimate election results",
+        score: 10
+      },
     ],
   },
 ];
@@ -65,7 +131,29 @@ function getBarColor(percent) {
 }
 
 export default function DemocracyRiskTool() {
-  const [checked, setChecked] = useState({});
+
+  const initialiseCheckedArray = () => {
+
+    let params = new URLSearchParams(document.location.search);
+    let selected = params.get('selected');
+
+    if (!selected) {
+      return {};
+    }
+
+    const newChecked = {};
+
+    selected.split(',').forEach((value) => {
+      newChecked[value] = true;
+    });
+
+    return newChecked;
+
+  };
+
+  const checkedFromUrl = initialiseCheckedArray();
+
+  const [checked, setChecked] = useState(checkedFromUrl);
 
   const toggle = (category, idx) => {
     const key = `${category}-${idx}`;
@@ -78,8 +166,8 @@ export default function DemocracyRiskTool() {
   const currentScore = Object.entries(checked)
     .filter(([_, v]) => v)
     .map(([key]) => {
-      const [cat, idx] = key.split("-");
-      const category = checklist.find(c => c.category.startsWith(cat));
+      const [catIdx, idx] = key.split("-");
+      const category = checklist[catIdx];
       return category ? category.items[parseInt(idx)].score : 0;
     })
     .reduce((a, b) => a + b, 0);
@@ -98,7 +186,27 @@ export default function DemocracyRiskTool() {
 
   const shareScore = () => {
     const url = new URL(window.location.href);
-    url.searchParams.set("score", currentScore);
+
+    /*checked.reduce((acc, curr) => {
+      console.log(acc, curr);
+    });*/
+
+    const checkedKeys = Object.keys(checked);
+    const checkedValues = Object.values(checked);
+
+    const filteredKeys = checkedKeys.filter((value, index) => {
+      return checkedValues[index];
+    });
+
+    const selectedValues = filteredKeys.reduce((acc, val, index) => {
+      if (index === 0) {
+        return val;
+      }
+
+      return acc + "," + val;
+    }, "");
+
+    url.searchParams.set("selected", selectedValues/*currentScore*/);
     navigator.clipboard.writeText(url.toString());
     alert("Link to your score copied to clipboard!");
   };
@@ -117,13 +225,13 @@ export default function DemocracyRiskTool() {
               <h2 className="text-xl font-semibold mb-2">{section.category}</h2>
               <div className="space-y-3">
                 {section.items.map((item, itemIdx) => {
-                  const key = `${section.category}-${itemIdx}`;
+                  const key = `${sectionIdx}-${itemIdx}`;
                   return (
                     <div key={key} className="flex items-center space-x-2">
                       <Checkbox
                         id={key}
                         checked={checked[key] || false}
-                        onChange={() => toggle(section.category, itemIdx)}
+                        onChange={() => toggle(section.id, itemIdx)}
                       />
                       <Label htmlFor={key}>{item.text} <span className="text-xs text-gray-500">(Score: {item.score})</span></Label>
                     </div>
