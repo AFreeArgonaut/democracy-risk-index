@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/democracy-risk-index/static/css/main.57a93f48.css",
-    "main.js": "/democracy-risk-index/static/js/main.70c81ecf.js",
+    "main.js": "/democracy-risk-index/static/js/main.ee13714c.js",
     "index.html": "/democracy-risk-index/index.html",
     "main.57a93f48.css.map": "/democracy-risk-index/static/css/main.57a93f48.css.map",
-    "main.70c81ecf.js.map": "/democracy-risk-index/static/js/main.70c81ecf.js.map"
+    "main.ee13714c.js.map": "/democracy-risk-index/static/js/main.ee13714c.js.map"
   },
   "entrypoints": [
     "static/css/main.57a93f48.css",
-    "static/js/main.70c81ecf.js"
+    "static/js/main.ee13714c.js"
   ]
 }
