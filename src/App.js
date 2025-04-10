@@ -5,6 +5,7 @@ import { Button } from "./components/ui/button";
 import { Checkbox } from "./components/ui/checkbox";
 import { Label } from "./components/ui/label";
 import html2canvas from "html2canvas";
+import {FacebookShareButton, TwitterShareButton, EmailShareButton, EmailIcon, XIcon, FacebookIcon} from 'react-share';
 
 const checklist = [
   {
@@ -184,7 +185,9 @@ export default function DemocracyRiskTool() {
     });
   };
 
-  const shareScore = () => {
+  let shareUrl = "https://afreeargonaut.github.io/democracy-risk-index";
+
+  const generateShareUrl = () => {
     const url = new URL(window.location.href);
 
     /*checked.reduce((acc, curr) => {
@@ -207,6 +210,12 @@ export default function DemocracyRiskTool() {
     }, "");
 
     url.searchParams.set("selected", selectedValues/*currentScore*/);
+    return url.toString();
+  }
+
+  const shareScore = () => {
+
+    const url = generateShareUrl();
     navigator.clipboard.writeText(url.toString());
     alert("Link to your score copied to clipboard!");
   };
@@ -256,6 +265,17 @@ export default function DemocracyRiskTool() {
       <div className="text-center space-x-4">
         <Button onClick={shareScore}>Share My Score</Button>
         <Button variant="secondary" onClick={exportImage}>Export as Image</Button>
+      </div>
+      <div className="text-center space-x-4">
+        <FacebookShareButton url={generateShareUrl()}>
+          <FacebookIcon size={32} round />
+        </FacebookShareButton>
+        <TwitterShareButton url={generateShareUrl()}>
+          <XIcon size={32} round />
+        </TwitterShareButton>
+        <EmailShareButton url={generateShareUrl()}>
+          <EmailIcon size={32} round />
+        </EmailShareButton>
       </div>
     </div>
   );
