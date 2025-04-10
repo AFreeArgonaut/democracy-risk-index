@@ -201,6 +201,10 @@ export default function DemocracyRiskTool() {
       return checkedValues[index];
     });
 
+    if (filteredKeys.length === 0) {
+      return url.toString();
+    }
+
     const selectedValues = filteredKeys.reduce((acc, val, index) => {
       if (index === 0) {
         return val;
