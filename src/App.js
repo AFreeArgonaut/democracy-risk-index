@@ -268,7 +268,6 @@ export default function DemocracyRiskTool() {
 
       <div className="text-center space-x-4">
         <Button onClick={shareScore}>Share My Score</Button>
-        <Button variant="secondary" onClick={exportImage}>Export as Image</Button>
       </div>
       <div className="text-center space-x-4">
         <FacebookShareButton url={generateShareUrl()}>
