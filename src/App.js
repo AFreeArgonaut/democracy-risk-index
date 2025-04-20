@@ -119,6 +119,7 @@ const checklist = [
 
 function getBarColor(percent) {
   // Map percent (0–100) into gradient: orange → red → black
+  // Weighting calculation.
   let r = 255, g = 140, b = 0; // start with orange
   if (percent > 50 && percent <= 80) {
     g = Math.max(0, 140 - (percent - 50) * 4.67); // reduce green
