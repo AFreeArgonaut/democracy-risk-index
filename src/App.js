@@ -19,7 +19,7 @@ const checklist = [
       },
       {
         id: 1,
-        text: "Replacement of civil servants with loyalists",
+        text: "Replacement of civil servants with loyalists for instance",
         score: 10
       },
       {
