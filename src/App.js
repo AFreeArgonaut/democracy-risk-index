@@ -120,14 +120,23 @@ const checklist = [
 function getBarColor(percent) {
   // Map percent (0–100) into gradient: orange → red → black
   // Weighting calculation.
+
+  const lowerPercent = 25;
+  const middlePercent = 50;
+  const highPercent = 80;
+
   let r = 255, g = 140, b = 0; // start with orange
-  if (percent > 50 && percent <= 80) {
-    g = Math.max(0, 140 - (percent - 50) * 4.67); // reduce green
+  if (percent > lowerPercent && percent <= middlePercent) {
+    g = Math.max(0, 140 - (percent - lowerPercent) * 4.67); // reduce green
     b = 0;
-  } else if (percent > 80) {
+  } else if (percent > middlePercent && percent <= highPercent) {
     r = Math.max(0, 255 - (percent - 80) * 5);
     g = 0;
     b = Math.max(0, (percent - 80) * 5);
+  } else if (percent > highPercent) {
+    r = 0;
+    g = 0;
+    b = 0;
   }
   return { backgroundColor: `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})` };
 }
