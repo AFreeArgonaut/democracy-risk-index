@@ -6,6 +6,7 @@ import { Checkbox } from "./components/ui/checkbox";
 import { Label } from "./components/ui/label";
 import html2canvas from "html2canvas";
 import {FacebookShareButton, TwitterShareButton, EmailShareButton, EmailIcon, XIcon, FacebookIcon} from 'react-share';
+import {Helmet} from "react-helmet";
 
 const checklist = [
   {
@@ -154,7 +155,7 @@ export default function DemocracyRiskTool() {
 
   const checkedFromUrl = initialiseCheckedArray();
 
-  const [checked, setChecked] = useState(checkedFromUrl);
+  const [checked, setChecked] = useState([]);
 
   const toggle = (category, idx) => {
     const key = `${category}-${idx}`;
@@ -173,7 +174,20 @@ export default function DemocracyRiskTool() {
     })
     .reduce((a, b) => a + b, 0);
 
+  const scoreFromUrl = Object.entries(checkedFromUrl)
+    .filter(([_, v]) => v)
+    .map(([key]) => {
+      const [catIdx, idx] = key.split("-");
+      const category = checklist[catIdx];
+      return category ? category.items[parseInt(idx)].score : 0;
+    })
+    .reduce((a, b) => a + b, 0);
+
+  console.log('Checked from URL', checkedFromUrl);
+  console.log('ScoreFromURL', scoreFromUrl);
+
   const riskPercent = Math.round((currentScore / maxScore) * 100);
+  const riskPercentFromUrl = Math.round((scoreFromUrl / maxScore) * 100);
 
   const exportImage = () => {
     const element = document.getElementById("dri-container");
@@ -202,7 +216,9 @@ export default function DemocracyRiskTool() {
     });
 
     if (filteredKeys.length === 0) {
-      return url.toString();
+
+      const urlAsString = url.toString();
+      return urlAsString.split('?')[0];
     }
 
     const selectedValues = filteredKeys.reduce((acc, val, index) => {
@@ -224,8 +240,16 @@ export default function DemocracyRiskTool() {
     alert("Link to your score copied to clipboard!");
   };
 
+  const title = `My democracy risk index is ${scoreFromUrl} / 140`;
+
   return (
     <div id="dri-container" className="max-w-3xl mx-auto p-6 space-y-6">
+      <Helmet>
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content="Find out your score by completing our quick survey" />
+        <meta property="og:image" content="https://afreeargonaut.github.io/democracy-risk-index/shareimage.png" />
+        <meta property="og:image:type" content="image/png" />
+      </Helmet>
       <h1 className="text-3xl font-bold text-center">Democracy Risk Index</h1>
       <p className="text-center text-muted-foreground">
         Check items you believe are happening. Your score reflects current risk to democracy.
@@ -268,6 +292,7 @@ export default function DemocracyRiskTool() {
 
       <div className="text-center space-x-4">
         <Button onClick={shareScore}>Share My Score</Button>
+        <Button variant="secondary" onClick={exportImage}>Export as Image</Button>
       </div>
       <div className="text-center space-x-4">
         <FacebookShareButton url={generateShareUrl()}>
