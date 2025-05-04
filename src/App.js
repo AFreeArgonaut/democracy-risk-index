@@ -254,12 +254,6 @@ export default function DemocracyRiskTool() {
 
   return (
     <div id="dri-container" className="max-w-3xl mx-auto p-6 space-y-6">
-      <Helmet>
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content="Find out your score by completing our quick survey" />
-        <meta property="og:image" content="https://afreeargonaut.github.io/democracy-risk-index/shareimage.png" />
-        <meta property="og:image:type" content="image/png" />
-      </Helmet>
       <h1 className="text-3xl font-bold text-center">Democracy Risk Index</h1>
       <p className="text-center text-muted-foreground">
         Check items you believe are happening. Your score reflects current risk to democracy.
